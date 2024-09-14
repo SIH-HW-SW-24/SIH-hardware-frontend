@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>IoT Enabled Pollution Monitoring</title>
+    <script src="https://www.gstatic.com/firebasejs/8.2.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.2.1/firebase-database.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <link rel="stylesheet" href="EcoConnect.css">
+
+    <style>
+        /* Ensure all cards have equal height */
+        .card {
+            flex: 1 1 18rem;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Ensure images are the same height */
+        .card-img-top {
+            height: 180px;
+            object-fit: cover;
+        }
+
+        /* Ensure card bodies fill the space */
+        .card-body {
+            flex-grow: 1;
+        }
+
+        #background {
+            padding: 2rem;
+        }
+
+        /* Padding between cards */
+        .card-group {
+            gap: 2rem;
+        }
+    </style>
+</head>
+
+<body>
+
+    <nav class="navbar bg-primary" data-bs-theme="dark">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">
+                <h2>Eco Connect</h2>
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
+                aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="#">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Predictions</a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
+                            aria-expanded="false">
+                            Sensors
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="#">MQ135</a></li>
+                            <li><a class="dropdown-item" href="#">DHT11</a></li>
+                            <li><a class="dropdown-item" href="#">BMP280</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link disabled" aria-disabled="true">Past Data</a>
+                    </li>
+                </ul>
+                <form class="d-flex" role="search">
+                    <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+                    <button class="btn btn-outline-success" type="submit">Search</button>
+                </form>
+            </div>
+        </div>
+    </nav>
+
+    <section id="background">
+        <div class="card-group d-flex flex-wrap justify-content-around">
+            <div class="card">
+                <img src="https://img.freepik.com/premium-photo/globe-earth-with-high-temperature-background_268269-89.jpg"
+                    class="card-img-top" alt="Temperature">
+                <div id="c1" class="card-body">
+                    <h5 class="card-title">Temperature</h5>
+                    <h1>
+                        <div id="temp">0</div>
+                    </h1>
+                    <a href="#" class="btn btn-dark mt-auto">Read More</a>
+                </div>
+            </div>
+
+            <div class="card">
+                <img src="https://www.sciline.org/wp-content/uploads/2021/02/cropped-Torrential-Rain-Flooding-and-Climate-Change.jpg"
+                    class="card-img-top" alt="Rain">
+                <div id="c2" class="card-body">
+                    <h5 class="card-title">Rain</h5>
+                    <h1>
+                        <div id="rain">0</div>
+                    </h1>
+                    <a href="#" class="btn btn-dark mt-auto">Read More</a>
+                </div>
+            </div>
+
+            <div class="card">
+                <img src="https://www.cidla.cz/wp-content/uploads/2020/08/vlhkost-na-skle-origo-1024x683.jpg"
+                    class="card-img-top" alt="Moisture">
+                <div id="c3" class="card-body">
+                    <h5 class="card-title">Moisture</h5>
+                    <h1>
+                        <div id="moisture">0</div>
+                    </h1>
+                    <a href="#" class="btn btn-dark mt-auto">Read More</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        // Your web app's Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyCU-Bdb3pb_iKEZS9JkqAZ5-jiUoW1Rshk",
+            authDomain: "irrigation-4991d.firebaseapp.com",
+            databaseURL: "https://irrigation-4991d-default-rtdb.firebaseio.com",
+            projectId: "irrigation-4991d",
+            storageBucket: "irrigation-4991d.appspot.com",
+            messagingSenderId: "450200498376",
+            appId: "1:450200498376:web:06d719ac2544cc0c2fb5fd",
+            measurementId: "G-VTN1LGNK1J"
+        };
+
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+
+        var rootRef = firebase.database().ref(); // Point to the root of the database
+
+        rootRef.on('value', function (snapshot) {
+            var data = snapshot.val();
+            console.log(data)
+            document.getElementById('temp').innerText = data.Temp;
+            document.getElementById('rain').innerText = data.Rain;
+            document.getElementById('moisture').innerText = data.Moisture;
+        });
+    </script>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
+        crossorigin="anonymous"></script>
+
+</body>
+
+</html>
