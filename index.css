@@ -34,14 +34,15 @@ body {
 /* Background and section styling */
 #background {
     width: 100%;
-    height: 50em;
     background: url('https://www.checkatrade.com/blog/wp-content/uploads/2020/10/irrigation-system-cost-per-zone.jpg') no-repeat center center;
     background-size: cover;
-    padding-top: 6em;
-    padding-bottom: 3em;
     box-sizing: border-box;
     color: white;
     text-align: center;
+}
+#content{
+    padding-top: 6em;
+    padding-bottom: 3em;
 }
 
 #background h1, #background h2 {
